@@ -20,14 +20,9 @@ class Experiment(object):
         self.bkg = bkg
         self.mass = mass
 
-    def Nbb(self, time, halflife):
-        """Return the number of bb events expected in the experiment after
-        a certain observation time and given a certain half-life."""
-
-        N = math.log(2.) * self.eff * self.mass * constants.N_A * time \
-        / (self.isotope.W * halflife)
-
-        return N
+    def N2nubb(self, time):
+        """Return the number of 2nubb expected after a certain observation time."""
+        return math.log(2.) * self.mass * constants.N_A * time / (self.isotope.W * self.isotope.T2nu)
 
     def half_life(self, time, Nbb):
         """Calculate the half-life for a given number of observed events"""
@@ -65,4 +60,4 @@ exo200 = Experiment(name, isotope.Xe136, eff, res, bkg, mass)
 
 if __name__ == '__main__':
 
-    print next100.Nbb(5*units.year, 1.E25*units.year)
+    print next100.N2nubb(5*units.year, 1.E25*units.year)
