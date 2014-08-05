@@ -11,7 +11,7 @@ def GenerateFCTable(CL, bkg_min=0., bkg_max=100., step=1.0):
 
     filename = DATA_PATH + 'FC' + str(int(CL*100)) + '.dat'
 
-    print 'Generating table of Feldman-Cousins average upper values for CL=', CL
+    print 'Generating table of Feldman-Cousins average upper values for CL=%0.2f' % CL
     
     fcm = conflimits.FCMemoizer(CL)
     fcm.ComputeTableAverageUpperLimits(bkg_min, bkg_max, step, filename)
