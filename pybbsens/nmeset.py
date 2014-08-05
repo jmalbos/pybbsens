@@ -29,4 +29,10 @@ QRPA_Jy = NMESet(name='QRPA_Jy', g_A=1.25, Ca48=1.67, Ge76=3.83, Se82=3.15, Zr96
 EDF = NMESet(name="EDF", g_A=1.25, Ca48=2.23, Ge76=5.55, Se82=4.67, Zr96=6.50, Mo100=6.59, Pd110=0.00, Cd116=5.35, Sn124=5.79, Te130=6.41, Xe136=4.77, Nd150=2.19)
 
 ### DICTIONARY
-NMEs = {IBM2.name: IBM2, ISM.name: ISM}
+nmedb = {IBM2.name: IBM2, ISM.name: ISM}
+
+
+
+#if __name__ == '__main__':
+    #print NMEs['IBM2'].g_A
+
