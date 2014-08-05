@@ -3,6 +3,7 @@
 import isotope
 import units
 import constants
+import conflimits
 
 import math
 
@@ -32,13 +33,22 @@ class Experiment(object):
 
         return hl
 
+    def sensitivity(self, exposure):
+        bevts = self.bkg * exposure * self.res
+        #AUL = conflimits.FeldmanCousins().AverageUpperLimit(bevts)
+        AUL=3.
+        A = math.sqrt(self.isotope.W * constants.m_e**2 / (constants.N_A * math.log(2.) * self.isotope.G0nu * 2.**2))
+
+        return A*math.sqrt(AUL/(self.eff*exposure))
+
+
 
 ##############################
 
 name = "NEXT100"
 
 eff  = 0.30
-res  = 0.75 
+res  = 0.75*2458.*units.keV 
 bkg  = 5.E-4 /(units.keV*units.kg*units.year)
 mass = 100.*0.91*units.kg
 
@@ -60,4 +70,5 @@ exo200 = Experiment(name, isotope.Xe136, eff, res, bkg, mass)
 
 if __name__ == '__main__':
 
-    print next100.N2nubb(5*units.year, 1.E25*units.year)
+    #print next100.N2nubb(5*units.year, 1.E25*units.year)
+    print next100.sensitivity(100.*units.kg*units.year) / units.meV
