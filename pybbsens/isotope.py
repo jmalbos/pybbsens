@@ -5,7 +5,7 @@ import units
 class Isotope(object):
     """docstring for Isotope"""
 
-    def __init__(self, symbol, Z, A, W, Qbb, G0nu):
+    def __init__(self, symbol, Z, A, W, Qbb, G0nu, T2nu):
         super(Isotope, self).__init__()
         self.symbol = symbol
         self.Z = Z  # atomic number
