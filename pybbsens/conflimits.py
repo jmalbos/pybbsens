@@ -1,10 +1,13 @@
 """docstring for module conflimits"""
 
 import math
+import array
 import numpy
 import csv
 from ROOT import TFeldmanCousins
 from scipy.stats import poisson
+from scipy import interpolate
+
 
 
 class ConfLimitsCalculator(object):
@@ -21,6 +24,7 @@ class ConfLimitsCalculator(object):
 
     def AverageUpperLimit(self):
         pass        
+
 
 
 class FeldmanCousins(ConfLimitsCalculator):
@@ -78,11 +82,13 @@ class FeldmanCousins(ConfLimitsCalculator):
         return UL
 
 
+
 class FCMemoizer(FeldmanCousins):
     """docstring for FCMemoizer"""
 
     def __init__(self, CL=0.90):
         super(FCMemoizer, self).__init__(CL)
+        self.AULs = 0
 
     def ComputeTableAverageUpperLimits(self, bmin, bmax, step, filename):
         """Compute a lookup table of average upper limits."""
@@ -95,17 +101,39 @@ class FCMemoizer(FeldmanCousins):
             UL = super(FCMemoizer, self).AverageUpperLimit(b)
             writer.writerow([b,UL])
 
+    def AverageUpperLimit(self, bkg):
+        """Use tabulated data (or for large values of bkg, a mathematical 
+        function extracted from a fit to the data) to speed up the computation
+        of the Feldman-Cousins average upper limit for a given background
+        prediction."""
 
+        if bkg < 0:
+            return 0.
+        elif bkg < 100.:
+            return self.AULs(bkg)
 
-            
+    def ReadTableAverageUpperLimits(self, filename):
+        xs = array.array('f')
+        ys = array.array('f')
+
+        reader = csv.reader(open(filename, 'r'))
+        for row in reader:
+            xs.append(float(row[0]))
+            ys.append(float(row[1]))
+
+        self.AULs = interpolate.interp1d(xs, ys)
+
 
 
 if __name__ == '__main__':
 
-    fccl = FeldmanCousins()
-    print fccl.UpperLimit(0.,0.)
-    print fccl.AverageUpperLimit(15.)
-
-    #fcm = FCMemoizer()
-    #fcm.ComputeTableAverageUpperLimits(0.,15., 1., 'fc09.dat')
+    ### Compute a lookup table for CL=68% with a Feldman-Cousins memoizer,
+    ### then use it to calculate the average upper limit for several
+    ### background predictions.
+    fcm = FCMemoizer(0.68)
+    fcm.ComputeTableAverageUpperLimits(0.5,7.5, 1., 'fcmemoizer.dat')
+    fcm.ReadTableAverageUpperLimits('fcmemoizer.dat')
+    print "B   AUL"
+    for b in range(1,7):
+        print "%i   %f" % (b, fcm.AverageUpperLimit(b))
 
