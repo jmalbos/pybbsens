@@ -2,10 +2,10 @@
 #include <TF1.h>
 #include <TCanvas.h>
 
-void FitFCAverageUL()
+void FitFCAverageUL(char* filename)
 {
    // Create a graph reading from a CSV file
-   TGraph* gr = new TGraph("FC09.dat", "%lg %lg", ",");
+   TGraph* gr = new TGraph(filename, "%lg %lg", ",");
 
    // Fit a square-root function in the range [10.,100.]
    TF1* sqrtfit = new TF1("sqrtfit", "[0]+[1]*sqrt(x)", 20., 100.);
