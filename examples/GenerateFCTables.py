@@ -18,8 +18,6 @@ def GenerateFCTable(CL, bkg_min=0., bkg_max=100., step=1.0):
 
 
 if __name__ == '__main__':
-
-
     
     GenerateFCTable(0.68)
     GenerateFCTable(0.90)
