@@ -30,7 +30,6 @@ class Isotope(object):
         return math.sqrt(mbb2)
 
 
-
 ############################################################
 ### DOUBLE BETA DECAY ISOTOPES --- DATABASE
 
@@ -158,6 +157,16 @@ isotopes = {Ca48.symbol: Ca48, Ge76.symbol: Ge76, Se82.symbol: Se82,
             Cd116.symbol: Cd116, Sn124.symbol: Sn124, Te130.symbol: Te130, 
             Xe136.symbol: Xe136, Nd150.symbol: Nd150}
 
+############################################################
+
+
+def SelectNMESet(nmeset):
+    """Redefine the nuclear matrix elements of all isotopes in the database
+    using a chosen NME set."""
+    for symbol in isotopes:
+        isotopes[symbol].M0nu = nmeset.g_A**2 * nmeset.data[symbol]
+
+
 
 if __name__ == '__main__':
 
@@ -165,5 +174,3 @@ if __name__ == '__main__':
     mbb = Te130.mbb(half_life) / units.eV
 
     print "Upper limit on effective Majorana neutrino mass from Te-130: mbb = %.3f eV" % (mbb)
-
-
