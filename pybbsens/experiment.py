@@ -26,19 +26,14 @@ class Experiment(object):
         return math.log(2.) * self.mass * constants.N_A * time \
                / (self.isotope.W * self.isotope.T2nu)
 
-    def mbb(self, half_life):
-        """Return the neutrino Majorana mass corresponding to a given half-life
-        of the 0nubb decay"""
+    def Nbkg(self, exposure):
+        """Return the number of background events expected 
+        for a given exposure."""
+        return (self.bkg * exposure * self.res)
 
-
-    def sensitivity(self, exposure):
-        bevts = self.bkg * exposure * self.res
-        #AUL = conflimits.FeldmanCousins().AverageUpperLimit(bevts)
-        AUL=3.
-        A = math.sqrt(self.isotope.W * constants.m_e**2 / (constants.N_A * math.log(2.) * self.isotope.G0nu * 2.**2))
-
-        return A*math.sqrt(AUL/(self.eff*exposure))
-
+    def sensitivity(self, exposure, clc):
+        aul = clc.AverageUpperLimit(self.Nbkg(exposure))
+        return self.isotope.constant_A() * math.sqrt(aul/(self.eff*exposure))
 
 
 
@@ -55,19 +50,11 @@ next100 = Experiment(name, isotope.Xe136, eff, res, bkg, mass)
 
 ##############################
 
-name = "EXO200"
-
-eff  = 0.50
-res  = 4.0
-bkg  = 1.7E-3 / (units.keV*units.kg*units.year)
-mass = 200.*0.81*units.kg
-
-exo200 = Experiment(name, isotope.Xe136, eff, res, bkg, mass)
 
 ##############################
 
 
 if __name__ == '__main__':
 
-    print next100.N2nubb(5*units.year)
-    #print next100.sensitivity(100.*units.kg*units.year) / units.meV
+    FC = conflimits.FeldmanCousins(0.9)
+    print next100.sensitivity(100.*units.kg*units.year, FC) / units.meV

@@ -33,7 +33,7 @@ class FeldmanCousins(ConfLimitsCalculator):
     def __init__(self, CL=0.9):
         super(FeldmanCousins, self).__init__(CL)
         self.FC = TFeldmanCousins(self.CL)
-        self.FC.SetMuMax(200.)
+        self.FC.SetMuMax(500.)
 
     def UpperLimit(self, obs, bkg):
         """
@@ -111,6 +111,8 @@ class FCMemoizer(FeldmanCousins):
             return 0.
         elif bkg < 100.:
             return self.AULs(bkg)
+        else:
+            return self.FitFunction(bkg)
 
     def ReadTableAverageUpperLimits(self, filename):
         xs = array.array('f')
@@ -123,9 +125,20 @@ class FCMemoizer(FeldmanCousins):
 
         self.AULs = interpolate.interp1d(xs, ys)
 
+    def FitFunction(self, x):
+        """Returns a value for the Feldman-Cousins average upper limit
+        using a mathematical function extracted from a fit to the data."""
+
+        if CL==0.9:
+            return 1.225 + 1.7312 * math.sqrt(x)
+        else:
+            raise ZeroDivisionError
 
 
 if __name__ == '__main__':
+
+    fc = FeldmanCousins(0.9)
+    print fc.AverageUpperLimit(200.)
 
     ### Compute a lookup table for CL=68% with a Feldman-Cousins memoizer,
     ### then use it to calculate the average upper limit for several
