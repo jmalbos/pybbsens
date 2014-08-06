@@ -37,6 +37,14 @@ class Isotope(object):
         except ZeroDivisionError:
             return 0.
 
+    def half_life(self, mbb):
+        Tinv = self.G0nu * self.M0nu**2 * mbb**2 / constants.m_e**2
+        try:
+            return 1./Tinv;
+        except ZeroDivisionError:
+            return 0.
+
+
 
 ############################################################
 ### DOUBLE BETA DECAY ISOTOPES --- DATABASE
