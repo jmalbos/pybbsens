@@ -1,8 +1,14 @@
-import sys
-sys.path.append('..')
-from pybbsens import conflimits
+"""This script expects to be living within the 'examples' directory
+of the pybbsens distribution."""
 
-DATA_PATH = '../data/'
+import os.path
+FILE_PATH = os.path.dirname(os.path.realpath(__file__))
+DATA_PATH = FILE_PATH + '/../data/'
+
+import sys
+sys.path.append(FILE_PATH + '/..')
+
+from pybbsens import conflimits
 
 
 def GenerateFCTable(CL, bkg_min=0., bkg_max=100., step=1.0):
@@ -19,7 +25,7 @@ def GenerateFCTable(CL, bkg_min=0., bkg_max=100., step=1.0):
 
 if __name__ == '__main__':
     
-    GenerateFCTable(0.68)
-    GenerateFCTable(0.90)
-    GenerateFCTable(0.95)
-    GenerateFCTable(0.99)
+    #GenerateFCTable(0.68)
+    GenerateFCTable(0.90, 110., 121., 1.0)
+    #GenerateFCTable(0.95)
+    #GenerateFCTable(0.99)
