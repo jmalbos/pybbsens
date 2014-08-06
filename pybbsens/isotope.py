@@ -7,7 +7,6 @@ import math
 
 
 
-
 class Isotope(object):
     """docstring for Isotope"""
 
@@ -22,12 +21,21 @@ class Isotope(object):
         self.M0nu = M0nu  # nuclear matrix element
         self.T2nu = T2nu  # half-life of the two-nu mode
 
+    def constant_A(self):
+        """Return the value of the constant A for the isotope."""
+        try:
+            return math.sqrt(self.W * constants.m_e**2 / (constants.N_A * math.log(2.) * self.G0nu * self.M0nu**2))
+        except ZeroDivisionError:
+            return 0.        
+
     def mbb(self, half_life):
         """Return the value of the neutrino Majorana mass corresponding to
         a given half-life of the 0nubb decay."""
-
-        mbb2 = constants.m_e**2 / (self.G0nu * self.M0nu**2 * half_life)
-        return math.sqrt(mbb2)
+        try:
+            mbb2 = constants.m_e**2 / (self.G0nu * self.M0nu**2 * half_life)
+            return math.sqrt(mbb2)
+        except ZeroDivisionError:
+            return 0.
 
 
 ############################################################
