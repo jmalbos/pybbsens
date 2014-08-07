@@ -4,4 +4,4 @@ Python library for the calculation of the sensitivity of a neutrinoless double b
 
 ### Authors
 
-PyββSens is written and mantained by [Justo Martín-Albo](http://next.ific.uv.es/) and [J.J. Gómez Cadenas](http://next.ific.uv.es/).
+PyββSens is written and maintained by [Justo Martín-Albo](http://next.ific.uv.es/) and [J.J. Gómez Cadenas](http://next.ific.uv.es/).
