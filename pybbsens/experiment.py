@@ -33,6 +33,7 @@ class Experiment(object):
 
     def sensitivity(self, exposure, clc):
         aul = clc.AverageUpperLimit(self.Nbkg(exposure))
+        #return math.log(2.)*constants.N_A*self.eff*exposure/(self.isotope.W*aul)
         return self.isotope.constant_A() * math.sqrt(aul/(self.eff*exposure))
 
 

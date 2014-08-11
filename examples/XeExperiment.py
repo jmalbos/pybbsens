@@ -15,6 +15,9 @@ from pybbsens import units
 from pybbsens import isotope
 from pybbsens import experiment
 from pybbsens import conflimits
+from pybbsens import nmeset
+
+isotope.SelectNMESet(nmeset.nmedb['QRPA_Jy'])
 
 
 ########################################
@@ -22,12 +25,12 @@ from pybbsens import conflimits
 
 ### The following parameters are not relevant for this calculation.
 ### Choose dummy values.
-eff  = 1.
+eff  = .3
 res  = 1. * units.keV
 mass = 0.
 
 ### Background counts in ROI per unit of exposure
-bkg_in_ROI = [x/(units.kg*units.year) for x in [0.01, 0.001, 0.]]
+bkg_in_ROI = [x/(units.kg*units.year) for x in [0.1, 0.01, 0.001, 0.]]
 
 ########################################
 ### Create a confidence-limit calculator. 

@@ -129,7 +129,7 @@ class FCMemoizer(FeldmanCousins):
         """Returns a value for the Feldman-Cousins average upper limit
         using a mathematical function extracted from a fit to the data."""
 
-        if CL==0.9:
+        if self.CL==0.9:
             return 1.225 + 1.7312 * math.sqrt(x)
         else:
             raise ZeroDivisionError
