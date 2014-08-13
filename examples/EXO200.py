@@ -28,7 +28,7 @@ FCM = conflimits.FCMemoizer(0.9)
 FCM.ReadTableAverageUpperLimits(DATA_PATH+'FC90.dat')
 
 mbb = EXO200.sensitivity(expo,FCM)
-print mbb / units.year
+print mbb /units.meV
 hl = isot.half_life(mbb)
 
 print hl / units.year
