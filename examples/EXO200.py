@@ -12,7 +12,6 @@ from pybbsens import experiment
 from pybbsens import conflimits
 from pybbsens import nmeset
 
-isotope.SelectNMESet(nmeset.nmedb['ISM'])
 
 name = "EXO200"
 isot = isotope.Xe136
@@ -27,8 +26,12 @@ EXO200 = experiment.Experiment(name, isotope.Xe136, eff, eres, bkg, mass)
 FCM = conflimits.FCMemoizer(0.9)
 FCM.ReadTableAverageUpperLimits(DATA_PATH+'FC90.dat')
 
-mbb = EXO200.sensitivity(expo,FCM)
-print mbb /units.meV
-hl = isot.half_life(mbb)
+nmes=["ISM","IBM2","QRPA_Tu","QRPA_Jy","EDF"]
+for nme in nmes:
+	print "NME = ", nme
+	isotope.SelectNMESet(nmeset.nmedb[nme])
 
-print hl / units.year
+	mbb = EXO200.sensitivity(expo,FCM)
+	print "mbb (meV) =",mbb /units.meV
+	hl = isot.half_life(mbb)
+	print "Tonu (year) =",hl / units.year
