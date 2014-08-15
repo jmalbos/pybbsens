@@ -13,15 +13,15 @@ from pybbsens import conflimits
 from pybbsens import nmeset
 
 
-name = "EXO200"
-isot = isotope.Xe136
-eff  = 0.846
-eres = isot.Qbb * 0.0153 * 2.35
-bkg  = 5.E-3 / (units.keV*units.kg*units.year)
-mass = 76. *units.kg
-expo = 100. *units.kg*units.year
+name = "GERDAII"
+isot = isotope.Ge76
+eff  = 0.62
+eres = isot.Qbb * 0.0015
+bkg  = 1.0E-3 / (units.keV*units.kg*units.year)
+mass = 50. *units.kg
+expo = 200. *units.kg*units.year
 
-EXO200 = experiment.Experiment(name, isotope.Xe136, eff, eres, bkg, mass)
+GERDA = experiment.Experiment(name, isotope.Ge76, eff, eres, bkg, mass)
 
 FCM = conflimits.FCMemoizer(0.9)
 FCM.ReadTableAverageUpperLimits(DATA_PATH+'FC90.dat')
@@ -31,7 +31,7 @@ for nme in nmes:
 	print "NME = ", nme
 	isotope.SelectNMESet(nmeset.nmedb[nme])
 
-	mbb = EXO200.sensitivity(expo,FCM)
+	mbb = GERDA.sensitivity(expo,FCM)
 	print "mbb (meV) =",mbb /units.meV
 	hl = isot.half_life(mbb)
 	print "Tonu (year) =",hl / units.year
