@@ -26,10 +26,9 @@ EXO200 = experiment.Experiment(name, isotope.Xe136, eff, eres, bkg, mass)
 FCM = conflimits.FCMemoizer(0.9)
 FCM.ReadTableAverageUpperLimits(DATA_PATH+'FC90.dat')
 
-nmes=["ISM","IBM2","QRPA_Tu","QRPA_Jy","EDF"]
-for nme in nmes:
-	print "NME = ", nme
-	isotope.SelectNMESet(nmeset.nmedb[nme])
+for key in nmeset.nmedb:
+	print "NME = ", key
+	isotope.SelectNMESet(nmeset.nmedb[key])
 
 	mbb = EXO200.sensitivity(expo,FCM)
 	print "mbb (meV) =",mbb /units.meV
