@@ -16,7 +16,7 @@ class Experiment(object):
         self.name = name ### Experiment's name
         self.isotope = isotope ### bb isotope used by the experiment
         self.eff = eff ### Detection efficiency for 0nubb
-        self.res = res ### Energy resolution (% FWHM) at Qbb
+        self.res = res ### Energy resolution (FWHM) at Qbb
         self.bkg = bkg ### Background rate in ROI
         self.mass = mass ### Isotope mass
 
@@ -31,11 +31,15 @@ class Experiment(object):
         for a given exposure."""
         return (self.bkg * exposure * self.res)
 
-    def sensitivity(self, exposure, clc):
+    def sensitivity_halflife(self, exposure, clc):
+        """Return the experimental sensitivity to the half-life of the
+        0nubb process."""
         aul = clc.AverageUpperLimit(self.Nbkg(exposure))
-        #return math.log(2.)*constants.N_A*self.eff*exposure/(self.isotope.W*aul)
-        return self.isotope.constant_A() * math.sqrt(aul/(self.eff*exposure))
+        return math.log(2.)*constants.N_A*self.eff*exposure/(self.isotope.W*aul)
 
+    def sensitivity_mbb(self, exposure, clc):
+        half_life = self.sensitivity_halflife(exposure, clc)
+        return self.isotope.mbb(half_life)
 
 
 ##############################

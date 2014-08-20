@@ -38,6 +38,8 @@ class Isotope(object):
             return 0.
 
     def half_life(self, mbb):
+        """Return the half-life that corresponds to a given effective Majorana
+        neutrino mass (for a given NME)."""
         Tinv = self.G0nu * self.M0nu**2 * mbb**2 / constants.m_e**2
         try:
             return 1./Tinv;
