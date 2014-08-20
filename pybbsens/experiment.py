@@ -42,24 +42,17 @@ class Experiment(object):
         return self.isotope.mbb(half_life)
 
 
-##############################
-
-name = "NEXT100"
-
-eff  = 0.30
-res  = 0.75*2458.*units.keV 
-bkg  = 5.E-4 /(units.keV*units.kg*units.year)
-mass = 100.*0.91*units.kg
-
-next100 = Experiment(name, isotope.Xe136, eff, res, bkg, mass)
-
-##############################
-
-
-##############################
-
 
 if __name__ == '__main__':
 
     FC = conflimits.FeldmanCousins(0.9)
-    print next100.sensitivity(100.*units.kg*units.year, FC) / units.meV
+
+    name = "Heidelberg-Moscow"
+    eff  = 0.8
+    res  = 4. *units.keV
+    bkg  = 0.07 /(units.keV*units.kg*units.year)
+    mass = 10. * units.kg 
+    HM = Experiment(name, isotope.Ge76, eff, res, bkg, mass)
+    
+    print "Sensitivity of the Heidelberg-Moscow experiment (90% CL): ", \
+    HM.sensitivity_halflife(35.5*units.kg*units.year, FC) / units.year
