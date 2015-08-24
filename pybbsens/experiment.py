@@ -38,6 +38,8 @@ class Experiment(object):
         return math.log(2.)*constants.N_A*self.eff*exposure/(self.isotope.W*aul)
 
     def sensitivity_mbb(self, exposure, clc):
+        """Return the experimental sensitivity to the effective neutrino
+        Majorana mass."""
         half_life = self.sensitivity_halflife(exposure, clc)
         return self.isotope.mbb(half_life)
 
@@ -45,14 +47,15 @@ class Experiment(object):
 
 if __name__ == '__main__':
 
-    FC = conflimits.FeldmanCousins(0.9)
-
     name = "Heidelberg-Moscow"
     eff  = 0.8
     res  = 4. *units.keV
     bkg  = 0.07 /(units.keV*units.kg*units.year)
     mass = 10. * units.kg 
     HM = Experiment(name, isotope.Ge76, eff, res, bkg, mass)
+
+    FC = conflimits.FeldmanCousins(0.9)
     
     print "Sensitivity of the Heidelberg-Moscow experiment (90% CL): ", \
     HM.sensitivity_halflife(35.5*units.kg*units.year, FC) / units.year
+
