@@ -140,12 +140,13 @@ PeV = petaelectronvolt
 kilogram  = joule*second*second/(meter*meter)   
 gram      = 1.e-3*kilogram
 milligram = 1.e-3*gram
-ton=1e+3*kilogram
+tonne     = 1.e+3*kilogram
 
 ## symbols
-kg = kilogram
-g  = gram
-mg = milligram
+kg  = kilogram
+g   = gram
+mg  = milligram
+ton = tonne
 
 ##############################
 ## Power [E][T^-1]
