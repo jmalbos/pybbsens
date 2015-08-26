@@ -7,6 +7,9 @@ import csv
 from ROOT import TFeldmanCousins
 from scipy.stats import poisson
 from scipy import interpolate
+import os.path
+FILE_PATH = os.path.dirname(os.path.realpath(__file__))
+DATA_PATH = FILE_PATH + '/../data/'
 
 
 
@@ -30,9 +33,9 @@ class ConfLimitsCalculator(object):
 class FeldmanCousins(ConfLimitsCalculator):
     """docstring for class FeldmanCousins"""
 
-    def __init__(self, CL=0.9):
+    def __init__(self, CL=90):
         super(FeldmanCousins, self).__init__(CL)
-        self.FC = TFeldmanCousins(self.CL)
+        self.FC = TFeldmanCousins(self.CL/100.) # Requires CL as a fraction
         self.FC.SetMuMax(500.)
 
     def UpperLimit(self, obs, bkg):
@@ -86,7 +89,7 @@ class FeldmanCousins(ConfLimitsCalculator):
 class FCMemoizer(FeldmanCousins):
     """docstring for FCMemoizer"""
 
-    def __init__(self, CL=0.90):
+    def __init__(self, CL=90):
         super(FCMemoizer, self).__init__(CL)
         self.AULs = 0
 
@@ -114,22 +117,28 @@ class FCMemoizer(FeldmanCousins):
         else:
             return self.FitFunction(bkg)
 
-    def ReadTableAverageUpperLimits(self, filename):
-        xs = array.array('f')
-        ys = array.array('f')
+    def ReadTableAverageUpperLimits(self, filename=''):
 
-        reader = csv.reader(open(filename, 'r'))
-        for row in reader:
-            xs.append(float(row[0]))
-            ys.append(float(row[1]))
+        if filename == '':
+            filename = DATA_PATH + 'FC' + str(self.CL) + '.dat'
 
-        self.AULs = interpolate.interp1d(xs, ys)
-
+        try:
+            reader = csv.reader(open(filename, 'r'))
+            xs = array.array('f')
+            ys = array.array('f')
+            for row in reader:
+                xs.append(float(row[0]))
+                ys.append(float(row[1]))
+            self.AULs = interpolate.interp1d(xs, ys)
+        except IOError:
+            print "ERROR: Memoizer file not found!\n"
+            raise
+        
     def FitFunction(self, x):
         """Returns a value for the Feldman-Cousins average upper limit
         using a mathematical function extracted from a fit to the data."""
 
-        if self.CL==0.9:
+        if self.CL==90:
             return 1.225 + 1.7312 * math.sqrt(x)
         else:
             raise ZeroDivisionError
@@ -137,16 +146,25 @@ class FCMemoizer(FeldmanCousins):
 
 if __name__ == '__main__':
 
-    fc = FeldmanCousins(0.9)
-    print fc.AverageUpperLimit(200.)
+    print "\n| pybbsens.conflimits |\n"
 
-    ### Compute a lookup table for CL=68% with a Feldman-Cousins memoizer,
-    ### then use it to calculate the average upper limit for several
-    ### background predictions.
-    fcm = FCMemoizer(0.68)
-    fcm.ComputeTableAverageUpperLimits(0.5,7.5, 1., 'fcmemoizer.dat')
+    ##########
+
+    print "# Compute Feldman-Cousins confidence intervals for b=0 and n=0-9.\n"
+
+    fc = FeldmanCousins(90)
+    for n in range(10):
+        print " n = %i :  [%.2f, %.2f]" % (n, fc.LowerLimit(n,0), fc.UpperLimit(n,0))
+
+    ##########
+
+    print """\n# Compute a lookup table of the average upper limit for CL=68%,
+    then use it to calculate the average upper limit for several background 
+    predictions.\n"""
+
+    fcm = FCMemoizer(68)
+    fcm.ComputeTableAverageUpperLimits(0.5,6.5, 1., 'fcmemoizer.dat')
     fcm.ReadTableAverageUpperLimits('fcmemoizer.dat')
-    print "B   AUL"
-    for b in range(1,7):
-        print "%i   %f" % (b, fcm.AverageUpperLimit(b))
+    for b in range(1,6):
+        print " b = %i :  %.2f" % (b, fcm.AverageUpperLimit(b))
 
