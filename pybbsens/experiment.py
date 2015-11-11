@@ -10,7 +10,7 @@ import math
 
 
 class Experiment(object):
-    """docstring for Experiment"""
+    """A neutrinoless double beta decay experiment"""
 
     def __init__(self, name, isotope, eff, res, bkg, mass):
         self.name = name ### Experiment's name
