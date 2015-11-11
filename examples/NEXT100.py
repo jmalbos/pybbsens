@@ -1,9 +1,8 @@
 ###
 
 import os.path
-FILE_PATH = os.path.dirname(os.path.realpath(__file__))
-DATA_PATH = FILE_PATH + '/../data/'
 import sys
+FILE_PATH = os.path.dirname(os.path.realpath(__file__))
 sys.path.append(FILE_PATH + '/..')
 
 from pybbsens import units
@@ -14,24 +13,23 @@ from pybbsens import nmeset
 
 
 name = "NEXT100"
-isot = isotope.Xe136
 eff  = 0.3
-eres = isot.Qbb * 0.007
+eres = isotope.Xe136.Qbb * 0.0075
 bkg  = 5.E-4 / (units.keV*units.kg*units.year)
-mass = 76. *units.kg
-expo = 300. *units.kg*units.year
+mass = 91. *units.kg
+expo = mass * 3 * units.year
 
 NEXT100 = experiment.Experiment(name, isotope.Xe136, eff, eres, bkg, mass)
 
-FCM = conflimits.FCMemoizer(0.9)
-FCM.ReadTableAverageUpperLimits(DATA_PATH+'FC90.dat')
+FCM = conflimits.FCMemoizer(90)
+FCM.ReadTableAverageUpperLimits()
 
 nmes=["ISM","IBM2","QRPA_Tu","QRPA_Jy","EDF"]
 for nme in nmes:
 	print "NME = ", nme
 	isotope.SelectNMESet(nmeset.nmedb[nme])
 
-	mbb = NEXT100.sensitivity(expo,FCM)
+	mbb = NEXT100.sensitivity_mbb(expo,FCM)
 	print "mbb (meV) =",mbb /units.meV
-	hl = isot.half_life(mbb)
+	hl = NEXT100.sensitivity_halflife(expo, FCM)
 	print "Tonu (year) =",hl / units.year
