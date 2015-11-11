@@ -47,15 +47,17 @@ class Experiment(object):
 
 if __name__ == '__main__':
 
-    name = "Heidelberg-Moscow"
-    eff  = 0.8
-    res  = 4. *units.keV
-    bkg  = 0.07 /(units.keV*units.kg*units.year)
-    mass = 10. * units.kg 
-    HM = Experiment(name, isotope.Ge76, eff, res, bkg, mass)
+    name = "EXO-200"
+    eff  = 0.846
+    res  = 0.153 * 2.3548 * isotope.Xe136.Qbb
+    bkg  = 0.002 /(units.keV*units.kg*units.year)
+    mass = 76. * units.kg 
+    EXO200 = Experiment(name, isotope.Ge76, eff, res, bkg, mass)
 
-    FC = conflimits.FeldmanCousins(0.9)
-    
-    print "Sensitivity of the Heidelberg-Moscow experiment (90% CL): ", \
-    HM.sensitivity_halflife(35.5*units.kg*units.year, FC) / units.year
+    #FC = conflimits.FeldmanCousins(90)
+    FC = conflimits.FCMemoizer(90)
+    FC.ReadTableAverageUpperLimits()
+    senshl = EXO200.sensitivity_halflife(100.*units.kg*units.year, FC)
+
+    print "Sensitivity (at 90% CL) of the EXO-200 experiment: {0:.1e} years.".format(senshl/units.year)
 
